@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1024" viewBox="0 0 1240 1024" role="img">
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+  <path d="M 0 0 L 10 5 L 0 10 z" fill="#b3bec9"/>
+</marker>
+</defs>
+<rect width="1240" height="1024" rx="16" fill="#0d1117"/>
+<text x="40" y="46" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="19" fill="#e6edf3" text-anchor="start" font-weight="600">matrix-stack — Synapse + MAS + PostgreSQL + nginx (+ LiveKit для звонков)</text>
+<text x="40" y="70" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13.5" fill="#b3bec9" text-anchor="start" font-weight="400">всё в одном docker compose, все настройки — в одном .env</text>
+<rect x="40" y="84" width="275" height="88" rx="10" fill="#1c2128" stroke="#9aa6b2" stroke-width="1.6"/>
+<rect x="40" y="84" width="275" height="4" rx="2" fill="#9aa6b2"/>
+<text x="177.5" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#e6edf3" text-anchor="middle">Element Desktop</text>
+<text x="177.5" y="142" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">настольный клиент</text>
+<rect x="335" y="84" width="275" height="88" rx="10" fill="#1c2128" stroke="#9aa6b2" stroke-width="1.6"/>
+<rect x="335" y="84" width="275" height="4" rx="2" fill="#9aa6b2"/>
+<text x="472.5" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#e6edf3" text-anchor="middle">Element X</text>
+<text x="472.5" y="142" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">iOS / Android</text>
+<rect x="630" y="84" width="275" height="88" rx="10" fill="#1c2128" stroke="#9aa6b2" stroke-width="1.6"/>
+<rect x="630" y="84" width="275" height="4" rx="2" fill="#9aa6b2"/>
+<text x="767.5" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#e6edf3" text-anchor="middle">Element Web</text>
+<text x="767.5" y="142" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">статичная сборка</text>
+<text x="767.5" y="163" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">в ./data/www/element-web</text>
+<rect x="925" y="84" width="275" height="88" rx="10" fill="#1c2128" stroke="#9aa6b2" stroke-width="1.6"/>
+<rect x="925" y="84" width="275" height="4" rx="2" fill="#9aa6b2"/>
+<text x="1062.5" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#e6edf3" text-anchor="middle">Другие серверы</text>
+<text x="1062.5" y="142" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">федерация</text>
+<path d="M 177 172 L 177 216" stroke="#9aa6b2" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+<path d="M 472 172 L 472 216" stroke="#9aa6b2" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+<path d="M 767 172 L 767 216" stroke="#9aa6b2" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+<path d="M 1062 172 L 1062 216" stroke="#9aa6b2" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+<text x="620" y="200" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#b3bec9" text-anchor="middle" font-weight="400">HTTPS :443  (внутри — TCP 80; TLS терминирует внешний прокси)</text>
+<rect x="40" y="222" width="1160" height="176" rx="10" fill="#161b22" stroke="#3fb950" stroke-width="1.6"/>
+<rect x="40" y="222" width="1160" height="4" rx="2" fill="#3fb950"/>
+<text x="620.0" y="254" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="17" font-weight="600" fill="#e6edf3" text-anchor="middle">nginx — единая точка входа (:80)</text>
+<text x="72" y="274" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12.5" fill="#3fb950" text-anchor="start" font-weight="400">/.well-known/matrix/*</text>
+<text x="368" y="274" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="start" font-weight="400">→</text>
+<text x="388" y="274" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">JSON для клиентов и федерации</text>
+<text x="72" y="306" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12.5" fill="#3fb950" text-anchor="start" font-weight="400">/_matrix/client/*</text>
+<text x="368" y="306" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="start" font-weight="400">→</text>
+<text x="388" y="306" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">Synapse :8008</text>
+<text x="72" y="338" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12.5" fill="#3fb950" text-anchor="start" font-weight="400">/_matrix/federation/*</text>
+<text x="368" y="338" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="start" font-weight="400">→</text>
+<text x="388" y="338" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">Synapse :8008</text>
+<text x="72" y="370" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12.5" fill="#3fb950" text-anchor="start" font-weight="400">/_synapse/admin/*</text>
+<text x="368" y="370" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="start" font-weight="400">→</text>
+<text x="388" y="370" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">Synapse :8008</text>
+<text x="652" y="274" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12.5" fill="#3fb950" text-anchor="start" font-weight="400">/login   /register   /account/*</text>
+<text x="948" y="274" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="start" font-weight="400">→</text>
+<text x="968" y="274" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">MAS :8082</text>
+<text x="652" y="306" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12.5" fill="#3fb950" text-anchor="start" font-weight="400">/oauth2/*   …/login</text>
+<text x="948" y="306" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="start" font-weight="400">→</text>
+<text x="968" y="306" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">MAS :8082</text>
+<text x="652" y="338" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12.5" fill="#3fb950" text-anchor="start" font-weight="400">/_synapse/client/rendezvous</text>
+<text x="948" y="338" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="start" font-weight="400">→</text>
+<text x="968" y="338" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">QR-вход, без буферизации</text>
+<text x="652" y="370" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12.5" fill="#3fb950" text-anchor="start" font-weight="400">/livekit/sfu/*   /livekit/jwt/*</text>
+<text x="948" y="370" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="start" font-weight="400">→</text>
+<text x="968" y="370" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">LiveKit :7880 · lk-jwt :8084</text>
+<path d="M 437 398 L 437 430 L 200 430 L 200 448" stroke="#3fb950" stroke-width="2.2" fill="none" marker-end="url(#ar)"/>
+<path d="M 620 398 L 620 430 L 620 430 L 620 448" stroke="#3fb950" stroke-width="2.2" fill="none" marker-end="url(#ar)"/>
+<path d="M 843 398 L 843 430 L 1040 430 L 1040 448" stroke="#3fb950" stroke-width="2.2" fill="none" marker-end="url(#ar)"/>
+<rect x="40" y="456" width="320" height="186" rx="10" fill="#161b22" stroke="#58a6ff" stroke-width="1.6"/>
+<rect x="40" y="456" width="320" height="4" rx="2" fill="#58a6ff"/>
+<text x="200.0" y="488" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#e6edf3" text-anchor="middle">Synapse 1.162.0</text>
+<text x="200.0" y="514" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">homeserver</text>
+<text x="200.0" y="535" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="middle">порт 8008 — клиенты и федерация</text>
+<text x="200.0" y="556" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">аутентификация делегирована MAS</text>
+<text x="200.0" y="577" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">(MSC3861), своя регистрация выключена</text>
+<text x="200.0" y="598" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">логи → data/synapse/logs</text>
+<rect x="460" y="456" width="320" height="186" rx="10" fill="#161b22" stroke="#a371f7" stroke-width="1.6"/>
+<rect x="460" y="456" width="320" height="4" rx="2" fill="#a371f7"/>
+<text x="620.0" y="488" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#e6edf3" text-anchor="middle">MAS 1.26.0</text>
+<text x="620.0" y="514" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">Matrix Authentication Service</text>
+<text x="620.0" y="535" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="middle">порт 8082  (health 8081)</text>
+<text x="620.0" y="556" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">вход, регистрация, OAuth2/OIDC,</text>
+<text x="620.0" y="577" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">пароли и устройства</text>
+<text x="620.0" y="598" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">ключи подписи → data/mas</text>
+<rect x="880" y="456" width="320" height="186" rx="10" fill="#161b22" stroke="#39c5cf" stroke-width="1.6"/>
+<rect x="880" y="456" width="320" height="4" rx="2" fill="#39c5cf"/>
+<text x="1040.0" y="488" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#e6edf3" text-anchor="middle">LiveKit 1.13.9  +  lk-jwt 0.7.0</text>
+<text x="1040.0" y="514" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">профиль calls (необязательно)</text>
+<text x="1040.0" y="535" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="middle">7880 — SFU,   8084 — выдача JWT</text>
+<text x="1040.0" y="556" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">UDP 7882–7892 — медиа</text>
+<text x="1040.0" y="577" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">TURN 3478/udp, 5349/tcp</text>
+<path d="M 200 642 L 200 676" stroke="#58a6ff" stroke-width="1.6" fill="none"/>
+<path d="M 620 642 L 620 676" stroke="#a371f7" stroke-width="1.6" fill="none"/>
+<rect x="40" y="676" width="780" height="104" rx="10" fill="#161b22" stroke="#e3b341" stroke-width="1.6"/>
+<rect x="40" y="676" width="780" height="4" rx="2" fill="#e3b341"/>
+<text x="430.0" y="708" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#e6edf3" text-anchor="middle">PostgreSQL 16</text>
+<text x="430.0" y="734" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="middle">две базы: synapse и mas (роли и БД создаёт initdb/ при первом старте)</text>
+<text x="430.0" y="755" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">том ./data/postgres</text>
+<rect x="880" y="676" width="320" height="104" rx="10" fill="#161b22" stroke="#9aa6b2" stroke-width="1.6"/>
+<rect x="880" y="676" width="320" height="4" rx="2" fill="#9aa6b2"/>
+<text x="1040.0" y="708" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#e6edf3" text-anchor="middle">том ./data</text>
+<text x="1040.0" y="734" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">media, логи, ключ подписи,</text>
+<text x="1040.0" y="755" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="middle">сгенерированные конфиги</text>
+<rect x="40" y="806" width="1160" height="128" rx="10" fill="#1c2128" stroke="#30363d"/>
+<text x="60" y="836" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#e6edf3" text-anchor="start" font-weight="600">Что открывать наружу</text>
+<text x="60" y="868" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#3fb950" text-anchor="start" font-weight="400">443 / 80 TCP</text>
+<text x="260" y="868" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">клиенты, федерация, страницы входа</text>
+<text x="640" y="868" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#3fb950" text-anchor="start" font-weight="400">7881 TCP</text>
+<text x="840" y="868" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">медиа поверх TCP (звонки)</text>
+<text x="60" y="896" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#3fb950" text-anchor="start" font-weight="400">7882–7892 UDP</text>
+<text x="260" y="896" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">медиа LiveKit (звонки)</text>
+<text x="640" y="896" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#3fb950" text-anchor="start" font-weight="400">3478 UDP / 5349 TCP</text>
+<text x="840" y="896" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">TURN (если включён)</text>
+<text x="60" y="924" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#b3bec9" text-anchor="start" font-weight="400">8448/TCP не нужен: федерация идёт через 443, адрес сообщается в /.well-known/matrix/server</text>
+<rect x="40" y="952" width="1160" height="46" rx="10" fill="#161b22" stroke="#30363d" stroke-dasharray="6 5"/>
+<text x="60" y="980" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#e6edf3" text-anchor="start" font-weight="400">config-init (одноразовый контейнер) рендерит конфиги из templates/ + .env в ./data/*.yaml до старта Synapse и MAS</text>
+</svg>

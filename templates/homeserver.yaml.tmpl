@@ -1,0 +1,136 @@
+# =============================================================================
+#  Synapse — homeserver.yaml (сгенерировано из templates/homeserver.yaml.tmpl)
+#  Не редактируйте этот файл: правки перезапишет config-init.
+#  Меняйте шаблон в templates/ и перезапускайте: docker compose up -d config-init
+# =============================================================================
+
+server_name: "${SERVER_NAME}"
+pid_file: /data/homeserver.pid
+
+listeners:
+  - port: 8008
+    bind_addresses: ["0.0.0.0"]
+    type: http
+    tls: false
+    x_forwarded: true
+    request_id_header: "X-Request-ID"
+    resources:
+      - names: [client, federation]
+        compress: false
+
+database:
+  name: psycopg2
+  txn_limit: 10000
+  args:
+    user: ${SYNAPSE_DB_USER}
+    password: ${SYNAPSE_DB_PASSWORD}
+    dbname: ${SYNAPSE_DB_NAME}
+    host: postgres
+    port: 5432
+    cp_min: 2
+    cp_max: 7
+
+# ------------------------------------------------------------------ логи
+log_config: "/data/log.yaml"
+
+# ------------------------------------------------------------------ медиа
+media_store_path: /data/media
+max_upload_size: 300M
+dynamic_thumbnails: true
+thumbnail_sizes:
+  - {width: 32,  height: 32,  method: crop}
+  - {width: 96,  height: 96,  method: crop}
+  - {width: 320, height: 240, method: scale}
+  - {width: 640, height: 480, method: scale}
+  - {width: 800, height: 600, method: scale}
+max_image_pixels: 32M
+# Автоочистка медиа: своё — 30 дней, чужое (из федерации) — 7 дней.
+media_retention:
+  local_media_lifetime: 30d
+  remote_media_lifetime: 7d
+
+# ------------------------------------------------------- предпросмотр ссылок
+url_preview_enabled: true
+url_preview_ip_range_blacklist:
+  - "127.0.0.0/8"
+  - "10.0.0.0/8"
+  - "172.16.0.0/12"
+  - "192.168.0.0/16"
+  - "100.64.0.0/10"
+  - "192.0.0.0/24"
+  - "169.254.0.0/16"
+  - "192.88.99.0/24"
+  - "198.18.0.0/15"
+  - "192.0.2.0/24"
+  - "198.51.100.0/24"
+  - "203.0.113.0/24"
+  - "224.0.0.0/4"
+  - "::1/128"
+  - "fe80::/10"
+  - "fc00::/7"
+  - "2001:db8::/32"
+  - "ff00::/8"
+  - "fec0::/10"
+
+# ------------------------------------------------------------------ ключи
+signing_key_path: "/data/homeserver.signing.key"
+suppress_key_server_warning: true
+macaroon_secret_key: "${SYNAPSE_MACAROON_SECRET_KEY}"
+registration_shared_secret: "${SYNAPSE_REGISTRATION_SHARED_SECRET}"
+
+# ------------------------------------------------------------------ кэши
+event_cache_size: 20K
+caches:
+  global_factor: 0.2
+  sync_response_cache_duration: 1m
+
+# ------------------------------------------------------- поиск и каталог
+enable_search: false
+user_directory:
+  enabled: true
+  search_all_users: true
+  prefer_local_users: true
+  # true = чужие (федеративные) пользователи не попадают в поиск клиента.
+  # Не мешает приглашать по ПОЛНОМУ MXID — это разные вещи.
+  exclude_remote_users: true
+  show_locked_users: true
+
+# ------------------------------------------------ защита от тяжёлых комнат
+limit_remote_rooms:
+  enabled: true
+  complexity: 0.5
+  complexity_error: "Сервер перегружен. Вход в эту комнату заблокирован."
+  admins_can_join: false
+
+presence:
+  enabled: true
+
+# ----------------------------------- аутентификация через MAS (MSC3861)
+# Регистрация и логин идут ТОЛЬКО через MAS: у Synapse своя выключена.
+matrix_authentication_service:
+  enabled: true
+  endpoint: "http://mas:8082/"
+  secret: "${MAS_MATRIX_SECRET}"
+enable_registration: false
+
+# --------------------------------------------------------------- push
+push:
+  enabled: true
+  include_content: true
+  group_unread_count_by_room: false
+
+# ---------------------------------------------------- федерация
+trusted_key_servers:
+  - server_name: "matrix.org"
+report_stats: false
+
+# ---------------------------------------------------- эксперим. фичи
+experimental_features:
+  # MSC4140 — отложенные события (нужно Element X)
+  msc4140_enabled: true
+  # MSC4222 — инкрементальный /sync
+  msc4222_enabled: true
+  # MSC2697 — отложенные удалённые устройства
+  msc2697_enabled: false
+  # MSC4108 — QR-вход на новое устройство (Link new device)
+  msc4108_enabled: true

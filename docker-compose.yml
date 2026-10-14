@@ -1,0 +1,159 @@
+# ============================================================================
+#  Matrix Synapse + MAS + PostgreSQL + nginx  (docker compose)
+#  Полная копия рабочей конфигурации: Synapse 1.162.0, MAS 1.26.0, PG 16.
+#  Опционально (профиль "calls"): LiveKit 1.13.9 + lk-jwt-service — звонки.
+#
+#  Перед первым запуском:
+#     cp .env.example .env   &&   ./scripts/generate-env.sh
+#  затем отредактируйте .env (домен!) и:
+#     docker compose up -d
+# ============================================================================
+
+name: matrix-stack
+
+services:
+  # ---------------------------------------------------------------- PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_SUPERUSER}
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD}
+      POSTGRES_DB: postgres
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+      # нужны скрипту initdb/01-databases.sh
+      SYNAPSE_DB_NAME: ${SYNAPSE_DB_NAME}
+      SYNAPSE_DB_USER: ${SYNAPSE_DB_USER}
+      SYNAPSE_DB_PASSWORD: ${SYNAPSE_DB_PASSWORD}
+      MAS_DB_NAME: ${MAS_DB_NAME}
+      MAS_DB_USER: ${MAS_DB_USER}
+      MAS_DB_PASSWORD: ${MAS_DB_PASSWORD}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_SUPERUSER} -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks: [matrix]
+
+  # ------------------------------------------- генерация ключей MAS (один раз)
+  # MAS сам создаёт раздел secrets: (ключи подписи + ключ шифрования).
+  # Ручная генерация этих ключей чревата несовместимым форматом — берём штатный.
+  #
+  # Два подводных камня образа MAS:
+  #   * внутри нет шелла (только бинарь /usr/local/bin/mas-cli) — никаких sh -c;
+  #   * процесс работает под uid 65532, а каталог ./data/mas создаётся root'ом,
+  #     поэтому запускаем генерацию как root.
+  # Файл пишется в слот .new: render.py переносит его в generated.yaml ТОЛЬКО
+  # на первом запуске. Иначе каждый `up` перегенерировал бы ключи и разлогинил всех.
+  mas-keys:
+    image: ${MAS_IMAGE}
+    restart: "no"
+    user: "0:0"
+    command: ["config", "generate", "--output", "/data/generated.new.yaml"]
+    volumes:
+      - ./data/mas:/data
+    networks: [matrix]
+
+  # ------------------------------------------------- рендер конфигов (один раз)
+  config-init:
+    image: python:3.12-alpine
+    restart: "no"
+    depends_on:
+      mas-keys:
+        condition: service_completed_successfully
+    env_file: [.env]
+    command: ["python3", "/scripts/render.py"]
+    volumes:
+      - ./scripts:/scripts:ro
+      - ./templates:/templates:ro
+      - ./data:/data
+    networks: [matrix]
+
+  # ------------------------------------------------------------------- Synapse
+  synapse:
+    image: ${SYNAPSE_IMAGE}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      config-init:
+        condition: service_completed_successfully
+    environment:
+      SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
+    volumes:
+      - ./data/synapse:/data
+    networks: [matrix]
+
+  # ----------------------------------------------------------------------- MAS
+  mas:
+    image: ${MAS_IMAGE}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      config-init:
+        condition: service_completed_successfully
+    # MAS_CONFIG делает путь к конфигу дефолтным для всех вызовов, поэтому
+    # `docker compose exec mas mas-cli manage ...` работает БЕЗ флага -c.
+    environment:
+      MAS_CONFIG: /data/config.yaml
+    command: ["server"]
+    volumes:
+      - ./data/mas:/data
+    networks: [matrix]
+
+  # --------------------------------------------------------------------- nginx
+  # Единая точка входа: /.well-known, /_matrix (клиент+федерация), MAS-страницы,
+  # /admin (Ketesa, если положите сборку), /element-web (если положите сборку),
+  # /livekit/* (звонки). TLS сюда НЕ входит — см. README (внешний прокси).
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on: [synapse, mas]
+    ports:
+      - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-80}:80"
+    volumes:
+      - ./data/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./data/www:/var/www/html:ro
+    networks: [matrix]
+
+  # ===================================================== профиль "calls" ====
+  # Звонки (Element Call / Element X): LiveKit SFU + сервис выдачи JWT.
+  livekit:
+    image: ${LIVEKIT_IMAGE}
+    profiles: ["calls"]
+    restart: unless-stopped
+    depends_on:
+      config-init:
+        condition: service_completed_successfully
+    command: ["--config", "/data/config.yaml"]
+    volumes:
+      - ./data/livekit:/data
+    ports:
+      - "${HTTP_BIND:-0.0.0.0}:7881:7881"              # ICE/TCP
+      - "${HTTP_BIND:-0.0.0.0}:${RTC_RANGE_START:-7882}-${RTC_RANGE_END:-7892}:${RTC_RANGE_START:-7882}-${RTC_RANGE_END:-7892}/udp"  # RTC (UDP)
+      - "${HTTP_BIND:-0.0.0.0}:${TURN_UDP_PORT:-3478}:3478/udp"  # TURN/UDP
+      - "${HTTP_BIND:-0.0.0.0}:${TURN_TLS_PORT:-5349}:5349/tcp"  # TURN/TLS
+    networks: [matrix]
+
+  lk-jwt:
+    image: ${LKJWT_IMAGE}
+    profiles: ["calls"]
+    restart: unless-stopped
+    depends_on: [livekit]
+    environment:
+      LIVEKIT_URL: wss://${SERVER_NAME}/livekit/sfu
+      LIVEKIT_KEY: ${LIVEKIT_KEY}
+      LIVEKIT_SECRET: ${LIVEKIT_SECRET}
+      # ВАЖНО: 0.0.0.0, а не localhost — иначе сервис биндится только на IPv6-loopback
+      LIVEKIT_JWT_BIND: 0.0.0.0:8084
+      # Имя переменной именно LIVEKIT_FULL_ACCESS_HOMESERVERS (без него сервис
+      # отказывается стартовать), можно перечислить через запятую.
+      LIVEKIT_FULL_ACCESS_HOMESERVERS: ${SERVER_NAME}
+    networks: [matrix]
+
+networks:
+  matrix:

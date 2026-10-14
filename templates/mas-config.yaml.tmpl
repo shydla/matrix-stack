@@ -1,0 +1,74 @@
+# =============================================================================
+#  MAS (Matrix Authentication Service) — config.yaml
+#  Сгенерировано из templates/mas-config.yaml.tmpl.
+#  Раздел `secrets:` дописывается автоматически ключами, которые создал
+#  mas-cli config generate (см. сервис mas-keys в docker-compose.yml).
+# =============================================================================
+
+http:
+  # Единый публичный слушатель: nginx проксирует сюда все страницы входа,
+  # OAuth2/OIDC-эндпоинты, discovery и admin API.
+  listeners:
+    - name: web
+      resources:
+        - name: discovery
+        - name: human
+        - name: oauth
+        - name: compat
+        - name: graphql
+        - name: assets
+        - name: adminapi
+      binds:
+        - address: 0.0.0.0:8082
+      proxy_protocol: false
+
+    - name: internal
+      resources:
+        - name: health
+      binds:
+        - host: 0.0.0.0
+          port: 8081
+      proxy_protocol: false
+
+  # Адреса доверенных прокси: запросы приходят от nginx внутри docker-сети.
+  trusted_proxies:
+    - 127.0.0.1/8
+    - 172.16.0.0/12
+
+  public_base: "${PUBLIC_BASE_URL}/"
+  issuer: "${PUBLIC_BASE_URL}/"
+
+database:
+  uri: "postgresql://${MAS_DB_USER}:${MAS_DB_PASSWORD}@postgres:5432/${MAS_DB_NAME}?sslmode=disable"
+  max_connections: 10
+  min_connections: 0
+  connect_timeout: 30
+  idle_timeout: 600
+  max_lifetime: 1800
+
+matrix:
+  homeserver: ${SERVER_NAME}
+  endpoint: "http://synapse:8008/"
+  secret: "${MAS_MATRIX_SECRET}"
+  kind: synapse
+
+# OIDC-клиенты. client_auth_method: none — публичный клиент без секрета
+# (Element Web / Element X / Element Desktop).
+clients:
+  - client_id: "${OIDC_CLIENT_ID}"
+    client_auth_method: none
+    redirect_uris:
+      - "${PUBLIC_BASE_URL}/element-web/"
+      - "http://localhost:8080/"
+
+account:
+  password_registration_enabled: true
+  # true = для регистрации нужен одноразовый токен (выдаётся на сервере)
+  password_registration_token_required: ${REGISTRATION_TOKEN_REQUIRED}
+  allow_username_change: true
+  allow_email_change: true
+
+policy:
+  data:
+    admin_users:
+      - ${ADMIN_USER}

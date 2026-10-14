@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="430" viewBox="0 0 1240 430" role="img">
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+  <path d="M 0 0 L 10 5 L 0 10 z" fill="#b3bec9"/>
+</marker>
+</defs>
+<rect width="1240" height="430" rx="16" fill="#0d1117"/>
+<text x="40" y="46" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="19" fill="#e6edf3" text-anchor="start" font-weight="600">Порядок запуска: docker compose up -d</text>
+<text x="40" y="70" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13.5" fill="#b3bec9" text-anchor="start" font-weight="400">compose сам держит зависимости — шаги выполняются по очереди, вручную ничего запускать не нужно</text>
+<rect x="40" y="106" width="220" height="186" rx="10" fill="#161b22" stroke="#e3b341" stroke-width="1.6"/>
+<rect x="40" y="106" width="220" height="4" rx="2" fill="#e3b341"/>
+<circle cx="68" cy="138" r="13" fill="#e3b341" opacity="0.16" stroke="#e3b341"/>
+<text x="68" y="143" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#e3b341" text-anchor="middle" font-weight="600">1</text>
+<text x="92" y="143" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#e6edf3" text-anchor="start" font-weight="600">postgres</text>
+<text x="60" y="172" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">postgres:16-alpine</text>
+<text x="60" y="202" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">поднимается и проходит</text>
+<text x="60" y="223" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">healthcheck</text>
+<text x="60" y="248" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">создаёт базы synapse и mas</text>
+<text x="60" y="269" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">скриптом initdb/01-databases.sh</text>
+<path d="M 265 199 L 280 199" stroke="#3fb950" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+<rect x="285" y="106" width="220" height="186" rx="10" fill="#161b22" stroke="#a371f7" stroke-width="1.6"/>
+<rect x="285" y="106" width="220" height="4" rx="2" fill="#a371f7"/>
+<circle cx="313" cy="138" r="13" fill="#a371f7" opacity="0.16" stroke="#a371f7"/>
+<text x="313" y="143" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#a371f7" text-anchor="middle" font-weight="600">2</text>
+<text x="337" y="143" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#e6edf3" text-anchor="start" font-weight="600">mas-keys</text>
+<text x="305" y="172" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">образ MAS</text>
+<text x="305" y="202" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">генерирует ключи MAS</text>
+<text x="305" y="223" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">штатным mas-cli</text>
+<text x="305" y="248" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">ключи фиксируются один раз:</text>
+<text x="305" y="269" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">иначе перезапуск разлогинит всех</text>
+<path d="M 510 199 L 525 199" stroke="#3fb950" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+<rect x="530" y="106" width="220" height="186" rx="10" fill="#161b22" stroke="#3fb950" stroke-width="1.6"/>
+<rect x="530" y="106" width="220" height="4" rx="2" fill="#3fb950"/>
+<circle cx="558" cy="138" r="13" fill="#3fb950" opacity="0.16" stroke="#3fb950"/>
+<text x="558" y="143" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#3fb950" text-anchor="middle" font-weight="600">3</text>
+<text x="582" y="143" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#e6edf3" text-anchor="start" font-weight="600">config-init</text>
+<text x="550" y="172" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">python:3.12-alpine</text>
+<text x="550" y="202" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">рендерит конфиги из</text>
+<text x="550" y="223" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">templates/ + .env</text>
+<text x="550" y="248" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">выравнивает владельца файлов,</text>
+<text x="550" y="269" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">валидирует .env и падает при ошибке</text>
+<path d="M 755 199 L 770 199" stroke="#3fb950" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+<rect x="775" y="106" width="220" height="186" rx="10" fill="#161b22" stroke="#58a6ff" stroke-width="1.6"/>
+<rect x="775" y="106" width="220" height="4" rx="2" fill="#58a6ff"/>
+<circle cx="803" cy="138" r="13" fill="#58a6ff" opacity="0.16" stroke="#58a6ff"/>
+<text x="803" y="143" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#58a6ff" text-anchor="middle" font-weight="600">4</text>
+<text x="827" y="143" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#e6edf3" text-anchor="start" font-weight="600">synapse + mas</text>
+<text x="795" y="172" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">оба сервиса</text>
+<text x="795" y="202" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">стартуют с готовыми</text>
+<text x="795" y="223" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">конфигами и базами</text>
+<text x="795" y="248" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">Synapse создаёт ключ подписи,</text>
+<text x="795" y="269" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">MAS применяет миграции БД</text>
+<path d="M 1000 199 L 1015 199" stroke="#3fb950" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+<rect x="1020" y="106" width="220" height="186" rx="10" fill="#161b22" stroke="#3fb950" stroke-width="1.6"/>
+<rect x="1020" y="106" width="220" height="4" rx="2" fill="#3fb950"/>
+<circle cx="1048" cy="138" r="13" fill="#3fb950" opacity="0.16" stroke="#3fb950"/>
+<text x="1048" y="143" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#3fb950" text-anchor="middle" font-weight="600">5</text>
+<text x="1072" y="143" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#e6edf3" text-anchor="start" font-weight="600">nginx</text>
+<text x="1040" y="172" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">nginx:1.27-alpine</text>
+<text x="1040" y="202" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">открывает порт 80</text>
+<text x="1040" y="223" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12.5" fill="#e6edf3" text-anchor="start" font-weight="400">и маршрутизирует</text>
+<text x="1040" y="248" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">профиль calls добавляет</text>
+<text x="1040" y="269" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#b3bec9" text-anchor="start" font-weight="400">livekit + lk-jwt</text>
+<rect x="40" y="320" width="1160" height="86" rx="10" fill="#1c2128" stroke="#30363d" stroke-dasharray="6 5"/>
+<text x="60" y="352" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#e6edf3" text-anchor="start" font-weight="400">Повторный запуск ничего не ломает: базы и ключи MAS лежат в ./data, конфиги перерисовываются заново.</text>
+<text x="60" y="382" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#3fb950" text-anchor="start" font-weight="400">С звонками:  docker compose --profile calls up -d   (в .env — ENABLE_CALLS=true)</text>
+</svg>

@@ -1,0 +1,168 @@
+# =============================================================================
+#  nginx — единая точка входа (сгенерировано из templates/nginx-site.conf.tmpl)
+#  TLS здесь НЕ терминируется: наружу обычно стоит внешний прокси/балансировщик
+#  (Nginx Proxy Manager, Caddy, Traefik) либо этот контейнер можно обернуть
+#  сертификатом. См. README, раздел «TLS».
+# =============================================================================
+
+server {
+    listen 80;
+    server_name _;
+
+    root /var/www/html;
+    index index.html;
+
+    client_max_body_size 300M;
+
+    # --- Well-known (обязательно для федерации и настройки клиентов) -------
+    location /.well-known/matrix/client {
+        default_type application/json;
+        add_header Access-Control-Allow-Origin *;
+    }
+    location /.well-known/matrix/server {
+        default_type application/json;
+        add_header Access-Control-Allow-Origin *;
+    }
+    location /.well-known/openid-configuration {
+        proxy_pass http://mas:8082;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # --- MAS: страницы входа, OAuth2/OIDC, discovery, admin API ------------
+    location ~ ^/(login|register|account|assets|oauth2|authorize|api|graphql|reauth|consent|complete-compat-sso|link|device|logout|\.well-known/(openid-configuration|oauth-authorization-server)|manifest\.webmanifest|policy\.txt|favicon\.ico) {
+        proxy_http_version 1.1;
+        proxy_pass http://mas:8082;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    # логин/логаут/refresh клиентов обслуживает MAS
+    location ~ ^/_matrix/client/(v1|v3|unstable)/(login|logout|refresh) {
+        proxy_http_version 1.1;
+        proxy_pass http://mas:8082;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # --- Федерация (отдельным блоком — для наглядности) -------------------
+    location /_matrix/federation/ {
+        proxy_pass http://synapse:8008;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    # --- QR-вход (MSC4108 rendezvous): без буферизации и gzip -------------
+    location ~ ^/_synapse/client/rendezvous {
+        proxy_pass http://synapse:8008;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_buffering off;
+        gzip off;
+    }
+    location ~ ^/_matrix/client/unstable/org.matrix.msc4108/rendezvous {
+        proxy_pass http://synapse:8008;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_buffering off;
+        gzip off;
+    }
+
+    # --- Synapse admin API -------------------------------------------------
+    location /_synapse/admin/ {
+        proxy_pass http://synapse:8008;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # --- Всё остальное из Matrix API — в Synapse ---------------------------
+    location ~ ^(/_matrix|/_synapse/client|/_synapse/mas) {
+        proxy_pass http://synapse:8008;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        client_max_body_size 300M;
+    }
+
+    # --- Звонки (профиль calls) --------------------------------------------
+    # livekit/lk-jwt — ОПЦИОНАЛЬНЫЕ апстримы: их может не быть, если профиль calls
+    # не поднят. Обычный proxy_pass с именем хоста убивает nginx на старте
+    # («host not found in upstream»), поэтому адрес берём из переменной —
+    # тогда имя резолвится в момент запроса, а не при запуске.
+    location ^~ /livekit/sfu/ {
+        resolver 127.0.0.11 ipv6=off valid=10s;
+        set $livekit_up http://livekit:7880;
+        rewrite ^/livekit/sfu/(.*)$ /$1 break;
+        proxy_pass $livekit_up;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_send_timeout 120;
+        proxy_read_timeout 120;
+        proxy_buffering off;
+        proxy_set_header Accept-Encoding gzip;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+    location ^~ /livekit/jwt/ {
+        resolver 127.0.0.11 ipv6=off valid=10s;
+        set $lkjwt_up http://lk-jwt:8084;
+        rewrite ^/livekit/jwt/(.*)$ /$1 break;
+        proxy_pass $lkjwt_up;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    location ~ ^/(sfu/get|get_token|healthz)$ {
+        resolver 127.0.0.11 ipv6=off valid=10s;
+        set $lkjwt_root http://lk-jwt:8084;
+        proxy_pass $lkjwt_root$request_uri;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # --- Веб-клиент и админ-панель: статические файлы ----------------------
+    # Положите сборку Element Web в ./data/www/element-web, панель — в ./data/www/admin.
+    location /element-web/ {
+        try_files $uri $uri/ /element-web/index.html;
+    }
+    location /admin/ {
+        try_files $uri $uri/ /admin/index.html;
+    }
+    location ~* ^/(element-web|admin)/.*\.(?:css|js|jpg|jpeg|gif|png|svg|ico|woff|woff2|ttf|eot|webp)$ {
+        expires 30d;
+        add_header Cache-Control "public";
+    }
+    location ~ /element-web/config\.json$ {
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+    }
+
+    location /api/admin/ {
+        proxy_pass http://mas:8082;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # --- Отбиваем типовой мусор --------------------------------------------
+    location ~* \.(php|asp|aspx|jsp|cgi|pl)$ {
+        return 444;
+    }
+
+    gzip on;
+    gzip_types text/plain application/javascript application/json text/css text/xml application/xml+rss;
+    gzip_min_length 1000;
+}
