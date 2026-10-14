@@ -6,8 +6,8 @@
 <rect width="1280" height="420" rx="18" fill="#0d1117"/>
 <rect x="0.8" y="0.8" width="1278.4" height="418.4" rx="17" fill="none" stroke="#30363d"/>
 <text x="64" y="132" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="56" fill="#e6edf3" text-anchor="start" font-weight="700">matrix-stack</text>
-<text x="64" y="176" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="19" fill="#b3bec9" text-anchor="start" font-weight="400">Собственный сервер Matrix в одном docker compose</text>
-<text x="64" y="204" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#8b949e" text-anchor="start" font-weight="400">Synapse + MAS + PostgreSQL + nginx, звонки — опционально (LiveKit)</text>
+<text x="64" y="176" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="19" fill="#b3bec9" text-anchor="start" font-weight="400">Your own Matrix server in one docker compose</text>
+<text x="64" y="204" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#8b949e" text-anchor="start" font-weight="400">Synapse + MAS + PostgreSQL + nginx, calls optional (LiveKit)</text>
 <rect x="64" y="229" width="157" height="30" rx="15" fill="#161b22" stroke="#58a6ff" stroke-width="1.4"/>
 <circle cx="79" cy="244" r="4" fill="#58a6ff"/>
 <text x="91" y="249" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#e6edf3" text-anchor="start" font-weight="400">Synapse 1.162.0</text>
@@ -23,8 +23,8 @@
 <rect x="633.6" y="229" width="149" height="30" rx="15" fill="#161b22" stroke="#39c5cf" stroke-width="1.4"/>
 <circle cx="648.6" cy="244" r="4" fill="#39c5cf"/>
 <text x="660.6" y="249" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#e6edf3" text-anchor="start" font-weight="400">LiveKit 1.13.9</text>
-<text x="64" y="322" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="14" fill="#b3bec9" text-anchor="start" font-weight="400">docker compose up -d   ·   один .env   ·   конфиги генерируются из templates/ автоматически</text>
-<text x="64" y="360" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#8b949e" text-anchor="start" font-weight="400">схема, порядок запуска и проверки — в README</text>
+<text x="64" y="322" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="14" fill="#b3bec9" text-anchor="start" font-weight="400">docker compose up -d   ·   one .env   ·   configs generated from templates/</text>
+<text x="64" y="360" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#8b949e" text-anchor="start" font-weight="400">diagrams, startup order and verified checks - in the README</text>
 <rect x="856" y="60" width="336" height="300" rx="12" fill="#0f141b" stroke="#30363d"/>
 <rect x="884" y="76" width="280" height="52" rx="8" fill="#161b22" stroke="#9aa6b2" stroke-width="1.5"/>
 <text x="1024.0" y="107.0" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#e6edf3" text-anchor="middle" font-weight="600">Element Desktop / X / Web</text>
