@@ -19,7 +19,7 @@ LiveKit for Element Call.
 ![Element X](https://img.shields.io/badge/Element%20X-iOS%20%7C%20Android-a371f7)
 ![Federation](https://img.shields.io/badge/federation-yes-58a6ff)
 
-🇷🇺 [Русская версия](README.ru.md)
+**English** · [Русский](README.ru.md)
 
 ---
 
@@ -410,3 +410,7 @@ MIT — see [LICENSE](LICENSE).
 
 Matrix, Synapse and Element are projects of the Matrix.org Foundation and Element HQ;
 this repository only packages their official images.
+
+---
+
+🇷🇺 **Читать по-русски:** [README.ru.md](README.ru.md) — тот же документ на русском языке.

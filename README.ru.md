@@ -15,7 +15,7 @@
 ![Element X](https://img.shields.io/badge/Element%20X-iOS%20%7C%20Android-a371f7)
 ![Федерация](https://img.shields.io/badge/federation-yes-58a6ff)
 
-🇬🇧 [English version](README.md)
+**Русский** · [English](README.md)
 
 Состав:
 
@@ -407,3 +407,7 @@ rendezvous-эндпоинты, health-эндпоинты), генерирует�
   «мусором» федерации.
 - **`trusted_proxies: 172.16.0.0/12`** в MAS — адреса docker-сети, откуда приходит
   nginx. Если меняете подсети compose, поправьте и это.
+
+---
+
+🇬🇧 **Read in English:** [README.md](README.md) — the same document in English.
