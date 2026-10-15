@@ -14,6 +14,11 @@ LiveKit for Element Call.
 ![Synapse](https://img.shields.io/badge/Synapse-1.162.0-58a6ff)
 ![MAS](https://img.shields.io/badge/MAS-1.26.0-a371f7)
 
+![Voice and video calls](https://img.shields.io/badge/calls-voice%20%26%20video-39c5cf)
+![QR login](https://img.shields.io/badge/QR%20login-MSC4108-3fb950)
+![Element X](https://img.shields.io/badge/Element%20X-iOS%20%7C%20Android-a371f7)
+![Federation](https://img.shields.io/badge/federation-yes-58a6ff)
+
 🇷🇺 [Русская версия](README.ru.md)
 
 ---
@@ -30,6 +35,23 @@ LiveKit for Element Call.
 
 Authentication is handled **only by MAS** (MSC3861): Synapse delegates login and
 registration to it and has its own registration disabled. Synapse never stores passwords.
+
+### Voice and video calls, QR login, Element X
+
+- **Voice and video calls** — 1:1 and group calls through **LiveKit** (the optional `calls`
+  profile), including TURN for clients behind hard NATs. When enabled, the generated configs
+  carry the `matrix_rtc` block in Synapse and `org.matrix.msc4143.rtc_foci` plus
+  `org.matrix.msc4143.ice_servers` in `/.well-known/matrix/client` — that is what Element Call,
+  Element Web/Desktop and Element X read to place a call.
+- **Element X (iOS / Android)** — supported end to end on this stack: OAuth2/OIDC sign-in
+  through MAS (discovery at `/.well-known/openid-configuration`, public client without a
+  secret), calls, device and session management, and QR login.
+- **QR-code login** — link a new device by scanning a QR code from a session that is already
+  signed in: `msc4108_enabled: true`, with both `rendezvous` endpoints proxied without
+  buffering and without gzip (ordering matters, see `templates/nginx-site.conf.tmpl`).
+
+QR login works between Element X, Element Web and Element Desktop — one session displays the
+code, the new device scans it. No password or token has to be typed on the new device.
 
 ![Architecture](docs/img/architecture.svg)
 
@@ -351,6 +373,13 @@ This bundle is not just written — it was brought up and exercised on a clean m
 | LiveKit through nginx (`/livekit/sfu/`) | 200 |
 | Stack **without** the `calls` profile | nginx starts, core API 200, `/livekit/*` → 502 (not a crash) |
 | Web UI through nginx (`/login`, `/account/sessions`) | both pages render, sign-in with the created user works |
+| Calls: `matrix_rtc` block in the rendered `homeserver.yaml` | present, `livekit_service_url` = `${PUBLIC_BASE_URL}/livekit/jwt` |
+| Calls: `org.matrix.msc4143.rtc_foci` in `/.well-known/matrix/client` | present, points at `/livekit/jwt`; `ice_servers` (TURN) added when `TURN_ENABLED=true` |
+| QR login: `msc4108_enabled: true` and both `rendezvous` locations | enabled; proxied with `proxy_buffering off` and `gzip off` |
+
+What this run did **not** include: placing an actual call and scanning a QR code with a phone —
+both need real clients on real devices. Everything they depend on (foci, ICE servers, rendezvous
+endpoints, health endpoints) is generated and served as listed above.
 
 A side effect of that run was four pitfalls that break such a stack out of the box — all
 fixed and documented above:

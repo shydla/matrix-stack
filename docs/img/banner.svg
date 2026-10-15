@@ -24,7 +24,7 @@
 <circle cx="648.6" cy="244" r="4" fill="#39c5cf"/>
 <text x="660.6" y="249" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13" fill="#e6edf3" text-anchor="start" font-weight="400">LiveKit 1.13.9</text>
 <text x="64" y="322" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="14" fill="#b3bec9" text-anchor="start" font-weight="400">docker compose up -d   ·   one .env   ·   configs generated from templates/</text>
-<text x="64" y="360" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#8b949e" text-anchor="start" font-weight="400">diagrams, startup order and verified checks - in the README</text>
+<text x="64" y="360" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#b3bec9" text-anchor="start" font-weight="400">Voice &amp; video calls   ·   QR-code login   ·   Element X   ·   federation</text>
 <rect x="856" y="60" width="336" height="300" rx="12" fill="#0f141b" stroke="#30363d"/>
 <rect x="884" y="76" width="280" height="52" rx="8" fill="#161b22" stroke="#9aa6b2" stroke-width="1.5"/>
 <text x="1024.0" y="107.0" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#e6edf3" text-anchor="middle" font-weight="600">Element Desktop / X / Web</text>

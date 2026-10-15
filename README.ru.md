@@ -10,6 +10,11 @@
 ![Synapse](https://img.shields.io/badge/Synapse-1.162.0-58a6ff)
 ![MAS](https://img.shields.io/badge/MAS-1.26.0-a371f7)
 
+![Звонки: голос и видео](https://img.shields.io/badge/calls-voice%20%26%20video-39c5cf)
+![QR-вход](https://img.shields.io/badge/QR%20login-MSC4108-3fb950)
+![Element X](https://img.shields.io/badge/Element%20X-iOS%20%7C%20Android-a371f7)
+![Федерация](https://img.shields.io/badge/federation-yes-58a6ff)
+
 🇬🇧 [English version](README.md)
 
 Состав:
@@ -24,6 +29,23 @@
 
 Аутентификацией занимается **только MAS** (`matrix_authentication_service`):
 регистрация и вход в Synapse идут через него, у Synapse своя регистрация выключена.
+
+### Голосовые и видеозвонки, QR-вход, Element X
+
+- **Голосовые и видеозвонки** — индивидуальные и групповые, через **LiveKit** (профиль `calls`),
+  с TURN для клиентов за сложным NAT. При включённых звонках сгенерированные конфиги содержат
+  блок `matrix_rtc` в Synapse и `org.matrix.msc4143.rtc_foci` + `org.matrix.msc4143.ice_servers`
+  в `/.well-known/matrix/client` — именно это читают Element Call, Element Web/Desktop и Element X,
+  чтобы начать звонок.
+- **Element X (iOS / Android)** — поддерживается полностью: вход по OAuth2/OIDC через MAS
+  (discovery на `/.well-known/openid-configuration`, публичный клиент без секрета), звонки,
+  управление устройствами и сессиями, QR-вход.
+- **QR-вход** — привязка нового устройства сканированием QR-кода с уже открытой сессии:
+  `msc4108_enabled: true` и оба локейшена `rendezvous` без буферизации и без gzip
+  (порядок локейшенов важен — см. `templates/nginx-site.conf.tmpl`).
+
+QR-вход работает между Element X, Element Web и Element Desktop: одна сессия показывает код,
+новое устройство его сканирует — вводить пароль или токен на новом устройстве не нужно.
 
 ![Схема стека](docs/img/architecture.svg)
 
@@ -353,6 +375,13 @@ docker compose down
 | LiveKit через nginx (`/livekit/sfu/`) | 200 |
 | Стек **без** профиля `calls` | nginx стартует, ядро API 200, `/livekit/*` → 502 (не падение) |
 | Веб-интерфейс через nginx (`/login`, `/account/sessions`) | обе страницы открываются, вход созданным пользователем проходит |
+| Звонки: блок `matrix_rtc` в отрендеренном `homeserver.yaml` | есть, `livekit_service_url` = `${PUBLIC_BASE_URL}/livekit/jwt` |
+| Звонки: `org.matrix.msc4143.rtc_foci` в `/.well-known/matrix/client` | есть, ведёт на `/livekit/jwt`; `ice_servers` (TURN) добавляются при `TURN_ENABLED=true` |
+| QR-вход: `msc4108_enabled: true` и оба локейшена `rendezvous` | включено; проксируются с `proxy_buffering off` и `gzip off` |
+
+Чего в прогоне **не было**: сам звонок и сканирование QR-кода телефоном — для этого нужны
+реальные клиенты на реальных устройствах. Всё, от чего они зависят (foci, ICE-серверы,
+rendezvous-эндпоинты, health-эндпоинты), генерируется и отдаётся так, как указано выше.
 
 Побочный результат прогона — четыре грабли, которые ломают такой стек «из коробки»
 (все исправлены и описаны выше): отсутствие шелла и uid 65532 в образе MAS;
